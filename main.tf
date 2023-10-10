@@ -21,26 +21,10 @@ resource "azurerm_resource_group" "Terra_grp" {
   location = "Canada Central"
 }
 
-resource "azurerm_storage_account" "storage4895612332" {
-  name                     = "storage4895612332"
-  resource_group_name      = "Terra_grp"
-  location                 = "Canada Central"
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
-  depends_on = [ azurerm_resource_group.Terra_grp ]
+resource "azurerm_virtual_network" "virtualnet" {
+  name                = "virtualnet"
+  address_space       = ["10.0.0.0/16"]
+  location            = "Canada Central"
+  resource_group_name = "Terra_grp" 
+}
 
-}
-resource "azurerm_storage_container" "cont1" {
-  name                  = "cont1"
-  storage_account_name  = "storage4895612332"
-  container_access_type = "blob"
-  depends_on = [ azurerm_storage_account.storage4895612332 ]
-}
-resource "azurerm_storage_blob" "blobex" {
-  name                   = "blobex"
-  storage_account_name   = "storage4895612332" 
-  storage_container_name = "cont1"
-  type                   = "Block"
-  source                 = "main.tf"
-  depends_on = [ azurerm_storage_container.cont1 ]
-}
